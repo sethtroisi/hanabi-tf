@@ -1,4 +1,6 @@
-from CardDeck import *
+import random
+
+from CardDeck import Card, Deck
 
 # TODO getState(): string
 # TODO loadState(string)
@@ -11,7 +13,7 @@ class Game:
 
     HAND_SIZE = 5
     
-    def __init__(self):
+    def __init__(self, seed):
         # TODO support more players
         self.players = 2
 
@@ -24,7 +26,7 @@ class Game:
         self.hints = Game.STARTING_HINTS
         self.blanksLeft = Game.STARTING_BLANKS
 
-        self.deck = Deck()
+        self.deck = Deck(seed)
         self.deck.reset()
 
         self.piles = dict((color,0) for color in Card.COLORS)

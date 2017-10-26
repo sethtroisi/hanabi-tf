@@ -51,8 +51,7 @@ class Deck:
         self.reset()
 
     def reset(self):
-        r = random.Random()
-        r.seed(self.seed)
+        r = random.Random(self.seed)
         self.cards = [Card(color, number) for color in Card.COLORS for number in Card.NUMBERS]
         r.shuffle(self.cards)
         self.index = 0
