@@ -1,4 +1,4 @@
-from card_deck import Card, Deck
+from card_deck import Color, Card, Deck
 
 # TODO getState(): string
 # TODO loadState(string)
@@ -7,13 +7,14 @@ from card_deck import Card, Deck
 
 
 class Game:
+    PLAYERS = 2
+
     STARTING_HINTS = 8
     STARTING_BLANKS = 4
 
     HAND_SIZE = 5
-    
+
     def __init__(self, seed):
-        # TODO support more players
         self.players = 2
 
         # status Vars
@@ -28,18 +29,18 @@ class Game:
         self.deck = Deck(seed)
         self.deck.reset()
 
-        self.piles = dict((color, 0) for color in Card.COLORS)
+        self.piles = dict((color, 0) for color in Color)
         self.discards = []
 
         self.hands = [[self.deck.draw() for _ in range(self.HAND_SIZE)]
                       for _ in range(self.players)]
- 
+
         self.actions = []
 
     def play(self, slot):
         assert self.result is None
         assert self.remainingTurns != 0
-        
+
         card = self.__pop(slot)
         if self.piles[card.getColor()] == card.getNumber() - 1:
             self.piles[card.getColor()] = card.getNumber()
@@ -52,12 +53,12 @@ class Game:
                 self.__end()
 
         self.__draw()
-        self.__advanceTurn()        
+        self.__advanceTurn()
 
     def discard(self, slot):
         assert self.result is None
         assert self.remainingTurns != 0
-        
+
         card = self.__pop(slot)
         self.discards.append(card)
         self.hints = min(self.hints, Game.STARTING_HINTS)
@@ -65,7 +66,7 @@ class Game:
                                 card, slot, self.hints))
 
         self.__draw()
-        self.__advanceTurn()        
+        self.__advanceTurn()
 
     def hint(self, otherPlayer, color, number):
         assert self.result is None
@@ -82,11 +83,11 @@ class Game:
         self.hints -= 1
         self.actions.append("Player {} hinted Player {} that slots {} are {}".format(
                                 self.toPlay, otherPlayer, slots, color or number))
-        self.__advanceTurn()       
+        self.__advanceTurn()
 
     def __pop(self, slot):
         assert self.toPlay < self.players
-                         
+
         hand = self.hands[self.toPlay]
         assert 0 <= slot < len(hand)
         card = hand.pop(slot)
@@ -94,7 +95,7 @@ class Game:
 
     def __draw(self):
         assert self.toPlay < self.players
-                         
+
         if len(self.deck) > 0:
             newCard = self.deck.draw()
             self.hands[self.toPlay].append(newCard)
@@ -124,7 +125,7 @@ class Game:
     def maxScore(self):
         # TODO improve based on discards
         return len(Card.COLORS) * len(Card.NUMBERS)
-    
+
     def __str__(self):
         return self.status(False)
 

@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
 
-import naive_agent
+import random_agent
 
 from table import Table
 
 players = [
-    naive_agent.NaiveAgent(),
-    naive_agent.NaiveAgent()
+    random_agent.RandomAgent(),
+    random_agent.RandomAgent()
 ]
 
 table = Table(players)

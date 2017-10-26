@@ -9,7 +9,7 @@ from game import Game
 
 class Table:
     PLAYERS = 2
-    
+
     def __init__(self, agents):
         self.seed = random.random()
         self.game = Game(self.seed)

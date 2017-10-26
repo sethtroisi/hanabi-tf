@@ -31,7 +31,7 @@ class TestStringMethods(unittest.TestCase):
       cards = [d1.draw() for i in range(len(Card.COLORS) * len(Card.NUMBERS))]
       assert len(cards) == 25
       assert len(set(cards)) == 25
-      
+
 
   def testDeck_hasUniqueHashes(self):
       d1 = Deck(1)
@@ -61,7 +61,7 @@ class TestStringMethods(unittest.TestCase):
       a.setState(saveState)
       secondBack = tuple(a.draw() for i in range(10))
       assert back == secondBack
-      
+
       a.reset()
       secondFront = tuple(a.draw() for i in range(10))
       assert front == secondFront

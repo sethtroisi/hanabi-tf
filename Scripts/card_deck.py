@@ -1,46 +1,60 @@
-import random
+from enum import IntEnum
 import functools
+import random
+
+
+class Color(IntEnum):
+    WHITE = 1
+    YELLOW = 2
+    BLUE = 3
+    RED = 4
+    GREEN = 5
+
+
+class Number(IntEnum):
+    ONE = 1
+    TWO = 2
+    THREE = 3
+    FOUR = 4
+    FIVE = 5
+
 
 @functools.total_ordering
 class Card:
-    COLORS = ["White", "Yellow", "Blue", "Red", "Green"] 
-    NUMBERS = [1, 2, 3, 4, 5]
-    
     def __init__(self, color, number):
-        self.color = color
-        self.number = number
-        assert self.color in Card.COLORS
-        assert self.number in Card.NUMBERS
+        self._color = color
+        self._number = number
+        assert self._color in Color
+        assert self._number in Number
 
     def getColor(self):
-        return self.color
+        return self._color
 
     def getNumber(self):
-        return self.number
+        return self._number
 
     def getState(self):
-        return self.color, self.number
+        return self._color, self._number
 
     def matches(self, color, number):
         assert (color is None) ^ (number is None)
 
-        if not number:
-            return self.number == number
-        if not color:
-            return self.color == color
+        if number:
+            return self._number == number
+        if color:
+            return self._color == color
 
     def __repr__(self):
         return "Card({}, {})".format(self.color, self.number)
 
     def __eq__(self, other):
         return (self.number, self.color) == (other.number, other.color)
-    
+
     def __lt__(self, other):
         return (self.number, self.color) < (other.number, other.color)
 
     def __hash__(self):
-        return self.NUMBERS.index(self.number) * len(self.COLORS) + \
-               self.COLORS.index(self.color)
+        return self.number * len(self.COLORS) + self.color
 
 
 # TODO take in the permutation numbering instead of seed
@@ -53,7 +67,7 @@ class Deck:
 
     def reset(self):
         r = random.Random(self.seed)
-        self.cards = [Card(color, number) for color in Card.COLORS for number in Card.NUMBERS]
+        self.cards = [Card(color, number) for color in Color for number in Number]
         r.shuffle(self.cards)
         self.index = 0
 
