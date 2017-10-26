@@ -1,6 +1,6 @@
 import random
 
-from CardDeck import Card, Deck
+from card_deck import Card, Deck
 
 # TODO getState(): string
 # TODO loadState(string)

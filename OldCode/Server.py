@@ -1,4 +1,4 @@
-import Game
+import game
 
 from http.server import BaseHTTPRequestHandler, HTTPServer
 import socketserver

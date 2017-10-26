@@ -1,4 +1,4 @@
-from CardDeck import *
+from card_deck import *
 
 # TODO getState(): string
 # TODO loadState(string)

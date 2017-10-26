@@ -1,6 +1,6 @@
 import random
 
-import Game
+from game import Game
 
 # TODO getState(): string
 # TODO loadState(string)
@@ -13,7 +13,7 @@ class Table:
     def __init__(self, agents):
         self.seed = random.random()
         self.players = agents
-        self.game = Game.Game(seed)
+        self.game = Game(self.seed)
 
 
     #### ACTIONS ####

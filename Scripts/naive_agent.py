@@ -1,6 +1,6 @@
 import random
 
-from Agent import Agent
+from agent import Agent
 
 
 class NaiveAgent(Agent):
