@@ -1,14 +1,14 @@
 #!/usr/bin/env python3
 
-import random
-
-import game
 import naive_agent
 
+from table import Table
 
-seed = random.random()
-game = game.Game(seed)
 players = [
-    naive_agent.NaiveAgent(game),
-    naive_agent.NaiveAgent(game)
+    naive_agent.NaiveAgent(),
+    naive_agent.NaiveAgent()
 ]
+
+table = Table(players)
+
+table.start()

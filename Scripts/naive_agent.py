@@ -8,10 +8,9 @@ class NaiveAgent(Agent):
     HURRY_UP = 0
     MAX_SCORE = 0
 
-    def __init__(self, game, name=None):
+    def __init__(self, name=None):
         Agent.__init__(
             self,
-            game,
             name or NaiveAgent._getRandomName())
 
 

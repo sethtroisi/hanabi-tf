@@ -1,7 +1,11 @@
 class Agent:
-    def __init__(self, game, name="None"):
+    def __init__(self, name="Agent"):
+        self.name = name
+        self.game = None
+
+
+    def setGame(self, game):
         self.game = game
-        self.name = name or "Agent"
 
 
     def getPlay(self, slot):

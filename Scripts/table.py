@@ -12,9 +12,10 @@ class Table:
     
     def __init__(self, agents):
         self.seed = random.random()
-        self.players = agents
         self.game = Game(self.seed)
-
+        self.players = agents
+        for player in self.players:
+            player.setGame(self.game)
 
     #### ACTIONS ####
     def start(self):
@@ -22,4 +23,4 @@ class Table:
         pass
 
     def getResult(self):
-        return (self.game.getScore(), self.game.getState())
+        return self.game.getScore(), self.game.getState()

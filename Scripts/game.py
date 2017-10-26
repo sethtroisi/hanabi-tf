@@ -1,11 +1,10 @@
-import random
-
 from card_deck import Card, Deck
 
 # TODO getState(): string
 # TODO loadState(string)
 # investigate jsonpickle
 # TODO get/set Note(player, turn)
+
 
 class Game:
     STARTING_HINTS = 8
@@ -29,18 +28,16 @@ class Game:
         self.deck = Deck(seed)
         self.deck.reset()
 
-        self.piles = dict((color,0) for color in Card.COLORS)
+        self.piles = dict((color, 0) for color in Card.COLORS)
         self.discards = []
 
-        self.hands = [[self.deck.draw() for card in range(self.HAND_SIZE)]
-                          for player in range(self.players)]
+        self.hands = [[self.deck.draw() for _ in range(self.HAND_SIZE)]
+                      for _ in range(self.players)]
  
         self.actions = []
 
-
-    #### ACTIONS ####
     def play(self, slot):
-        assert self.result == None
+        assert self.result is None
         assert self.remainingTurns != 0
         
         card = self.__pop(slot)
@@ -58,7 +55,7 @@ class Game:
         self.__advanceTurn()        
 
     def discard(self, slot):
-        assert self.result == None
+        assert self.result is None
         assert self.remainingTurns != 0
         
         card = self.__pop(slot)
@@ -71,15 +68,17 @@ class Game:
         self.__advanceTurn()        
 
     def hint(self, otherPlayer, color, number):
-        assert self.result == None
+        assert self.result is None
         assert self.remainingTurns != 0
         assert self.hints > 0
 
-        assert (color == None) ^ (number == None)
+        assert (color is None) ^ (number is None)
 
         otherPlayerHand = self.hands[otherPlayer]
-        slots = [i for i in range(Game.HAND_SIZE)
-                             if otherPlayerHand[i].matches(color, number)]
+        slots = [i for i, card in otherPlayerHand if card.matches(color, number)]
+        assert slots, "Can't give empty hint {} to {}".format(
+            (color, number), otherPlayerHand
+        )
         self.hints -= 1
         self.actions.append("Player {} hinted Player {} that slots {} are {}".format(
                                 self.toPlay, otherPlayer, slots, color or number))
@@ -104,7 +103,6 @@ class Game:
                 self.remainingTurns = self.players
                 # Log to UI that game is ending soon
 
-
     def __advanceTurn(self):
         self.turn += 1
         self.toPlay = self.turn % self.players
@@ -113,13 +111,10 @@ class Game:
             if self.remainingTurns == 0:
                 self.__end()
 
-
-    def __end(self, result):
-        self.reult = self.maxScore()
+    def __end(self):
+        self.result = self.getScore()
         self.actions.append("Game Ended with score {}".format(self.getScore()))
 
-
-    #### END ACTIONS ####
     def canHint(self):
         return self.hints > 0
 
@@ -127,11 +122,11 @@ class Game:
         return sum(self.piles.values())
 
     def maxScore(self):
+        # TODO improve based on discards
         return len(Card.COLORS) * len(Card.NUMBERS)
     
     def __str__(self):
         return self.status(False)
-
 
     def getState(self):
         return (
@@ -143,35 +138,32 @@ class Game:
             tuple(tuple(card.getState() for card in hand) for hand in self.hands),
             tuple(self.actions))
 
-    def status(self, printHands = False):
-        statusLines = []
+    def status(self, printHands=False):
+        statusLines = list()
         statusLines.append("Game with {} players, turn {}, player {} to play"
-            .format(self.players, self.turn, self.toPlay))
+                           .format(self.players, self.turn, self.toPlay))
 
-        statusLines.append("\t" + " ".join(map(lambda c: "{}: {}".format(c, self.piles[c]),
-            Card.COLORS)))
+        statusLines.append("\t" + " ".join(sorted(self.piles.items())))
 
         statusLines.append("\thints: {}, blanks: {}, cards left: {}".format(
             self.hints, self.blanksLeft, len(self.deck)))
 
         statusLines.append("")
         statusLines.append("\tActions:")
-        statusLines += map(lambda a : "\t\t" + str(a), self.actions)
+        statusLines += map(lambda a: "\t\t" + str(a), self.actions)
 
         statusLines.append("")
         statusLines.append("\tDiscards:")
-        statusLines += map(lambda c : "\t\t" + str(c), self.discards)
+        statusLines += map(lambda c: "\t\t" + str(c), self.discards)
 
         if printHands:
             statusLines.append("")
             statusLines.append("\tHands:")
-            statusLines += map(lambda p: "\t\tPlayer {}: {}".format(
-                                                p[0], ", ".join(map(str, p[1]))),
-                                    enumerate(self.hands))
-
+            for i, hand in enumerate(self.hands):
+                statusLines += "\t\tPlayer {}: {}".format(i, ", ".join(map(str, hand)))
 
         resultLine = "Result: {} (Score: {})".format(self.result, self.getScore())
-        if self.remainingTurns != None:
+        if not self.remainingTurns:
             resultLine += " {} turns remaining".format(self.remainingTurns)
         statusLines.append(resultLine)
 

@@ -19,14 +19,14 @@ class Card:
         return self.number
 
     def getState(self):
-        return (self.color, self.number)
+        return self.color, self.number
 
     def matches(self, color, number):
-        assert (color == None) ^ (number == None)
-        
-        if number != None:
+        assert (color is None) ^ (number is None)
+
+        if not number:
             return self.number == number
-        if color != None:
+        if not color:
             return self.color == color
 
     def __repr__(self):
@@ -48,6 +48,7 @@ class Deck:
     def __init__(self, seed):
         self.seed = seed
         self.index = 0
+        self.cards = None
         self.reset()
 
     def reset(self):
@@ -64,7 +65,7 @@ class Deck:
         return len(self.cards)
 
     def getState(self):
-        return (self.seed, self.index)
+        return self.seed, self.index
 
     def setState(self, status):
         self.seed = status[0]
