@@ -1,6 +1,7 @@
 from enum import Enum
 
-class TurnAction:
+
+class Action:
     """
         Action performed on a turn
         PLAY, [1-5]
@@ -21,12 +22,12 @@ class TurnAction:
 
     @staticmethod
     def play(index):
-        return TurnAction(TurnAction.Action.PLAY, index)
+        return Action(Action.Action.PLAY, index)
 
     @staticmethod
     def discard(index):
-        return TurnAction(TurnAction.Action.PLAY, index)
+        return Action(Action.Action.PLAY, index)
 
     @staticmethod
     def hintColor(index):
-        return TurnAction(TurnAction.Action.PLAY, index)
+        return Action(Action.Action.PLAY, index)

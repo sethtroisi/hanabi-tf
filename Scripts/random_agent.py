@@ -1,6 +1,7 @@
 import random
 
 from agent import Agent
+from action import Action
 
 
 class RandomAgent(Agent):
@@ -27,13 +28,21 @@ class RandomAgent(Agent):
         # 2. Clue a non-empty set of cards that are all playable
         # 3. Discard
 
+        # 1.
         if self.playable:
-            return "PLAY"
+            return Action.play(self.playable[0])
 
+        # 2.
+        # 2a determine what's playable
+        theyCanPlay = []
+        for i, card in self.
 
+        # 2b determine if any clue only hits playable cards
+
+    def updateFromAction(self, action):
         pass
 
-    def otherPlayerAction(self, action):
+    def updateFromPartnerAction(self, action):
         pass
 
     @staticmethod
